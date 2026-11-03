@@ -264,6 +264,13 @@ nav.tabs[data-mode="reimp"]{grid-template-columns:repeat(3,1fr)!important}
 #detLink{flex-direction:row!important;flex-wrap:wrap;align-items:center!important;margin:0 0 14px!important}
 #detLink .seg{flex-shrink:0}
 .det-sum{border:1px solid var(--line);border-radius:12px;padding:6px 12px;background:var(--bg)}
+.blk-h{flex-wrap:wrap}
+.blk-reset{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:99px;padding:5px 10px;min-height:32px;font:600 12px var(--sans);flex-shrink:0}
+.blk-reset svg{width:15px;height:15px}
+.blk-reset:hover{color:var(--ink);border-color:var(--ink)}
+
+.kpis.two{grid-template-columns:1fr 1fr}
+.kpis.two .kpi:not(.hero) .n{font-size:26px}
 .recap-line.sm{font-size:13px;color:var(--muted);padding-top:0}
 .menu-wrap{position:relative}
 .mode-menu{position:absolute;right:0;top:42px;z-index:60;min-width:230px;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 28px rgba(29,27,24,.18);padding:6px}
@@ -327,7 +334,7 @@ nav.tabs[data-mode="reimp"]{grid-template-columns:repeat(3,1fr)!important}
     <p class="hint">Décrivez le rayon bloc par bloc : le DGP se calcule au fur et à mesure.</p>
 
     <div class="blk">
-      <div class="blk-h"><span class="blk-n">1</span><h3>Magasin</h3></div>
+      <div class="blk-h"><span class="blk-n">1</span><h3>Magasin</h3><button type="button" class="blk-reset" data-reset="r-mag" aria-label="Remettre ce bloc à zéro" title="Remettre à zéro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 2.6-6.4"/><path d="M3 4v5h5"/></svg><span>Remise à zéro</span></button></div>
       <div class="blk-b grid2">
         <div class="field"><label for="magasin">Nom du magasin</label><input id="magasin" placeholder="Ex. Carrefour Vénissieux"></div>
         <div class="field"><label for="m1">Nom du M1</label><input id="m1" placeholder="Qui fait le relevé"></div>
@@ -336,7 +343,7 @@ nav.tabs[data-mode="reimp"]{grid-template-columns:repeat(3,1fr)!important}
     </div>
 
     <div class="blk">
-      <div class="blk-h"><span class="blk-n">2</span><h3>Objectif</h3></div>
+      <div class="blk-h"><span class="blk-n">2</span><h3>Objectif</h3><button type="button" class="blk-reset" data-reset="r-obj" aria-label="Remettre ce bloc à zéro" title="Remettre à zéro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 2.6-6.4"/><path d="M3 4v5h5"/></svg><span>Remise à zéro</span></button></div>
       <div class="blk-b">
         <p class="hint">Objectif de part de linéaire AB InBev pour ce magasin, en pourcentage, en mètres ou en centimètres.</p>
         <div class="grid2">
@@ -352,7 +359,7 @@ nav.tabs[data-mode="reimp"]{grid-template-columns:repeat(3,1fr)!important}
     </div>
 
     <div class="blk">
-      <div class="blk-h"><span class="blk-n">3</span><h3>Éléments du rayon</h3></div>
+      <div class="blk-h"><span class="blk-n">3</span><h3>Éléments du rayon</h3><button type="button" class="blk-reset" data-reset="r-elem" aria-label="Remettre ce bloc à zéro" title="Remettre à zéro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 2.6-6.4"/><path d="M3 4v5h5"/></svg><span>Remise à zéro</span></button></div>
       <div class="blk-b">
         <p class="hint">Un bloc par groupe d'éléments identiques. Les demi-palettes et palettes se saisissent par élément : 2 éléments avec 2 demi-palettes chacun comptent 4 demi-palettes.</p>
         <div id="elemList"></div>
@@ -361,7 +368,7 @@ nav.tabs[data-mode="reimp"]{grid-template-columns:repeat(3,1fr)!important}
     </div>
 
     <div class="blk">
-      <div class="blk-h"><span class="blk-n">4</span><h3>Au sol, hors éléments</h3></div>
+      <div class="blk-h"><span class="blk-n">4</span><h3>Au sol, hors éléments</h3><button type="button" class="blk-reset" data-reset="r-sol" aria-label="Remettre ce bloc à zéro" title="Remettre à zéro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 2.6-6.4"/><path d="M3 4v5h5"/></svg><span>Remise à zéro</span></button></div>
       <div class="blk-b">
         <p class="hint">Uniquement les demi-palettes et palettes posées seules, en dehors d'un élément. Une demi-palette compte si elle repose sur un support et atteint 4 hauteurs de gerbage (pack Leffe 12x25cl). Posée dans le mauvais sens, elle compte pour deux.</p>
         <div class="grid2">
@@ -373,7 +380,7 @@ nav.tabs[data-mode="reimp"]{grid-template-columns:repeat(3,1fr)!important}
     </div>
 
     <div class="blk">
-      <div class="blk-h"><span class="blk-n">5</span><h3>Mobilier</h3></div>
+      <div class="blk-h"><span class="blk-n">5</span><h3>Mobilier</h3><button type="button" class="blk-reset" data-reset="r-mob" aria-label="Remettre ce bloc à zéro" title="Remettre à zéro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 2.6-6.4"/><path d="M3 4v5h5"/></svg><span>Remise à zéro</span></button></div>
       <div class="blk-b">
         <p class="hint">Mobilier fournisseur : on le compte seulement s'il est intégré physiquement au rack bière.</p>
         <div id="mobList"></div>
@@ -389,7 +396,7 @@ nav.tabs[data-mode="reimp"]{grid-template-columns:repeat(3,1fr)!important}
   <!-- ============ FACINGS ============ -->
   <section class="view" id="v-facings" aria-label="Facings">
     <h2>Facings</h2>
-    <p class="hint">Touchez + pour chaque facing. Un facing gerbé (deux packs superposés) compte pour un seul facing.</p>
+    <div class="row-head"><p class="hint" style="margin:0">Touchez + pour chaque facing. Un facing gerbé (deux packs superposés) compte pour un seul facing.</p><button type="button" class="blk-reset" data-reset="r-fac" aria-label="Remettre ce bloc à zéro" title="Remettre à zéro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 2.6-6.4"/><path d="M3 4v5h5"/></svg><span>Remise à zéro</span></button></div>
     <div id="fSol"></div>
     <input class="search" id="fSearch" type="search" placeholder="Chercher une marque, un produit, un format">
     <div class="chips" id="fChips"></div>
@@ -417,7 +424,7 @@ nav.tabs[data-mode="reimp"]{grid-template-columns:repeat(3,1fr)!important}
     <p class="hint">Renseignez le point de départ, puis ajoutez ce qui est gagné ou perdu. Le résultat se met à jour en bas de page.</p>
 
     <div class="blk">
-      <div class="blk-h"><span class="blk-n">1</span><h3>Point de départ</h3></div>
+      <div class="blk-h"><span class="blk-n">1</span><h3>Point de départ</h3><button type="button" class="blk-reset" data-reset="s-depart" aria-label="Remettre ce bloc à zéro" title="Remettre à zéro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 2.6-6.4"/><path d="M3 4v5h5"/></svg><span>Remise à zéro</span></button></div>
       <div class="blk-b">
         <div class="det-link" id="detLink"></div>
         <div id="s0Simple">
@@ -439,7 +446,7 @@ nav.tabs[data-mode="reimp"]{grid-template-columns:repeat(3,1fr)!important}
     </div>
 
     <div class="blk">
-      <div class="blk-h"><span class="blk-n">2</span><h3>Gagné ou perdu</h3><span data-impact="mv"></span></div>
+      <div class="blk-h"><span class="blk-n">2</span><h3>Gagné ou perdu</h3><span data-impact="mv"></span><button type="button" class="blk-reset" data-reset="s-mv" aria-label="Remettre ce bloc à zéro" title="Remettre à zéro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 2.6-6.4"/><path d="M3 4v5h5"/></svg><span>Remise à zéro</span></button></div>
       <div class="blk-b">
         <p class="hint">Choisissez le produit, puis les facings, demi-palettes ou palettes gagnés (+) ou perdus (−) par AB InBev. La place est prise ou rendue à la concurrence : le DGP ne change pas ici. Si le rayon s'agrandit ou rétrécit, indiquez-le dans le bloc 3.</p>
         <div id="mvList"></div>
@@ -448,7 +455,7 @@ nav.tabs[data-mode="reimp"]{grid-template-columns:repeat(3,1fr)!important}
     </div>
 
     <div class="blk">
-      <div class="blk-h"><span class="blk-n">3</span><h3>Taille du rayon</h3><span data-impact="ry"></span></div>
+      <div class="blk-h"><span class="blk-n">3</span><h3>Taille du rayon</h3><span data-impact="ry"></span><button type="button" class="blk-reset" data-reset="s-ry" aria-label="Remettre ce bloc à zéro" title="Remettre à zéro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 2.6-6.4"/><path d="M3 4v5h5"/></svg><span>Remise à zéro</span></button></div>
       <div class="blk-b">
         <p class="hint">Éléments, étagères, demi-palettes ou palettes d'autres fournisseurs ajoutés (+) ou retirés (−). Seul le DGP change.</p>
         <div id="ryList"></div>
@@ -485,15 +492,14 @@ nav.tabs[data-mode="reimp"]{grid-template-columns:repeat(3,1fr)!important}
 
     <div id="detBody" hidden>
       <div class="blk">
-        <div class="blk-h"><span class="blk-n">A</span><h3>Taille du DGP</h3></div>
+        <div class="blk-h"><span class="blk-n">A</span><h3>Taille du DGP</h3><button type="button" class="blk-reset" data-reset="d-struct" aria-label="Remettre ce bloc à zéro" title="Remettre à zéro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 2.6-6.4"/><path d="M3 4v5h5"/></svg><span>Remise à zéro</span></button></div>
         <div class="blk-b">
           <p class="hint">Saisissez la taille totale du rayon, puis la part en cave à bière. Tout ce qui n'est pas en cave à bière est en packs. Le DGP calculé remplace le DGP global de l'onglet Simulation.</p>
           <div id="stBody"></div>
         </div>
       </div>
-      </div>
       <div class="blk">
-        <div class="blk-h"><span class="blk-n">B</span><h3>Objectif</h3></div>
+        <div class="blk-h"><span class="blk-n">B</span><h3>Objectif</h3><button type="button" class="blk-reset" data-reset="d-obj" aria-label="Remettre ce bloc à zéro" title="Remettre à zéro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 2.6-6.4"/><path d="M3 4v5h5"/></svg><span>Remise à zéro</span></button></div>
         <div class="blk-b">
           <div class="f-row">
             <div class="field"><label for="detObj">Objectif de PDL (facultatif)</label><input id="detObj" data-s0="objVal" inputmode="decimal" placeholder="Ex. 20"></div>
@@ -502,12 +508,16 @@ nav.tabs[data-mode="reimp"]{grid-template-columns:repeat(3,1fr)!important}
         </div>
       </div>
       <div class="blk">
-        <div class="blk-h"><span class="blk-n">C</span><h3>Facings de départ</h3></div>
+        <div class="blk-h"><span class="blk-n">C</span><h3>Facings de départ</h3><button type="button" class="blk-reset" data-reset="d-fac" aria-label="Remettre ce bloc à zéro" title="Remettre à zéro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 2.6-6.4"/><path d="M3 4v5h5"/></svg><span>Remise à zéro</span></button></div>
         <div class="blk-b">
           <input class="search" id="s0Search" type="search" placeholder="Chercher une marque, un produit, un format">
           <div class="chips" id="s0Chips"></div>
           <div id="s0List"></div>
         </div>
+      </div>
+      <div class="blk res">
+        <div class="blk-h"><span class="blk-n">D</span><h3>Situation de départ</h3></div>
+        <div class="blk-b"><div id="detRes"></div></div>
       </div>
     </div>
     <button class="btn primary" data-goto="s-main" style="width:100%;margin-top:8px">Retour à la simulation</button>
@@ -1407,6 +1417,38 @@ function show(v) {
 /* ------------------------------------------------------------------ */
 /* Vue Rayon                                                           */
 /* ------------------------------------------------------------------ */
+
+/* Remise à zéro par encadré */
+const RESETS = {
+  "r-mag": ["Effacer le nom du magasin et du M1 ?", () => { R.magasin = ""; R.m1 = ""; R.date = new Date().toISOString().slice(0, 10); LS.set("pdl.m1", ""); }],
+  "r-obj": ["Effacer l'objectif ?", () => { R.objectif = { valeur: 0, unite: (R.objectif || {}).unite || "pct" }; LS.set("pdl.objectif", R.objectif); }],
+  "r-elem": ["Revenir à un seul élément vide ?", () => { R.elements = [{ id: uid(), typeId: REF.elements[0]?.id || "e133", nb: 1, etag: num(REF.params.etag) || 5, segment: "pack", cabParElem: 0, virt: 0, dp: 0, pal: 0 }]; }],
+  "r-sol": ["Remettre à zéro les demi-palettes et palettes seules ?", () => { R.dpTotal = 0; R.palTotal = 0; }],
+  "r-mob": ["Supprimer tout le mobilier saisi ?", () => { R.mobiliers = []; }],
+  "r-fac": ["Remettre à zéro tous les facings, demi-palettes et palettes attribués ?", () => { R.facings = {}; R.dp = {}; R.pal = {}; solOpen.clear(); }],
+  "s-depart": ["Effacer le DGP, la part AB InBev et l'objectif du point de départ ?", () => { S2.dgp0 = 0; S2.pdl0 = 0; S2.ld0 = 0; S2.objectif = { ...S2.objectif, valeur: 0 }; }],
+  "s-mv": ["Supprimer tous les produits gagnés ou perdus ?", () => { S2.mvts = []; }],
+  "s-ry": ["Supprimer tous les changements de taille du rayon ?", () => { S2.rayon = []; }],
+  "d-struct": ["Remettre à zéro la taille du DGP ?", () => { S2.det.struct = { tot: { typeId: S2.det.struct.tot.typeId, etag: 0, dp: 0, pal: 0, ajust: 0 }, cab: { etag: 0, dp: 0, pal: 0, ajust: 0 } }; }],
+  "d-obj": ["Effacer l'objectif ?", () => { S2.objectif = { ...S2.objectif, valeur: 0 }; }],
+  "d-fac": ["Remettre à zéro tous les facings, demi-palettes et palettes de départ ?", () => { S2.det.f = {}; S2.det.dp = {}; S2.det.pal = {}; s0SolOpen.clear(); }]
+};
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-reset]"); if (!b) return;
+  const r = RESETS[b.dataset.reset]; if (!r || !confirm(r[0])) return;
+  r[1]();
+  if (b.dataset.reset.startsWith("r-")) {
+    saveDraft();
+    if ($("#v-facings").classList.contains("on")) renderFacings(); else renderRayon();
+    refreshLive();
+  } else {
+    saveSim2();
+    if ($("#v-s-detail").classList.contains("on")) renderDetail(); else renderSimMain();
+    refreshSim();
+  }
+  toast("Remis à zéro");
+});
+
 /* Menu de changement de mode (maison) */
 $("#homeBtn").addEventListener("click", e => {
   e.stopPropagation();
@@ -1884,7 +1926,7 @@ function refreshSim() {
   }
   document.querySelectorAll("[data-impact]").forEach(el => { el.innerHTML = badgeHTML(c, el.dataset.impact); });
   renderS0Recap(c);
-  if ($("#v-s-detail").classList.contains("on")) renderDetRecap(c);
+  if ($("#v-s-detail").classList.contains("on")) { renderDetRecap(c); renderDetRes(c); }
   if ($("#v-s-main").classList.contains("on")) renderSimResult(c);
   return c;
 }
@@ -2092,12 +2134,43 @@ function changeLines() {
 
 /* --- Onglet Détail --- */
 const s0SolOpen = new Set();
+/* Vue simplifiée de la situation de départ (bas de l'onglet Détail) */
+function renderDetRes(c = simCompute()) {
+  const box = $("#detRes"); if (!box) return;
+  const { e0, base } = c;
+  if (!e0.dgp) { box.innerHTML = `<div class="empty">Renseignez la taille du DGP (A) pour voir la PDL de départ.</div>`; return; }
+  let i = 0;
+  const brands = Object.entries(base.det.brands).filter(([, cm]) => cm > 0.04).sort((a, b) => b[1] - a[1])
+    .map(([n, cm]) => ({ n, cm, col: ABI_COLORS[i++ % ABI_COLORS.length] }));
+  const reste = Math.max(0, e0.dgp - e0.ld);
+  box.innerHTML = `
+    <div class="kpis two">
+      <div class="kpi hero"><div class="n">${fmtPct(e0.pdl)}</div><div class="t">PDL AB InBev avant les changements</div></div>
+      <div class="kpi"><div class="n">${base.seg ? fmtPct(e0.pdlPack) : "–"}</div><div class="t">PDL packs</div></div>
+      <div class="kpi"><div class="n">${base.seg && e0.dgpCab ? fmtPct(e0.pdlCab) : "–"}</div><div class="t">PDL cave à bière</div></div>
+      <div class="kpi"><div class="n">${fmtCm(e0.ld)}</div><div class="t">LD AB InBev</div></div>
+      <div class="kpi"><div class="n">${fmtCm(e0.dgp)}</div><div class="t">DGP du rayon</div></div>
+    </div>
+    ${ecartHTML(e0.ld, e0.dgp, S2.objectif)}
+    <h3 class="sub">Le rayon vu de face</h3>
+    <div class="shelf">
+      <div class="shelf-track" role="img" aria-label="Répartition du linéaire par marque">
+        ${brands.map(b => `<div style="flex:0 0 ${Math.min(100, b.cm / e0.dgp * 100)}%;background:${b.col}" title="${esc(b.n)}"></div>`).join("")}
+      </div>
+      <div class="shelf-foot"><span>0</span><span>${fmtCm(e0.dgp)}</span></div>
+    </div>
+    <div class="legend">
+      ${brands.map(b => `<div class="li"><span class="sw" style="background:${b.col}"></span><span>${esc(b.n)}</span><span class="m">${fmtCm(b.cm)}</span><span class="v">${fmtPct(b.cm / e0.dgp)}</span></div>`).join("")}
+      ${reste > 0.5 ? `<div class="li"><span class="sw" style="background:repeating-linear-gradient(135deg,var(--bg) 0 3px,var(--line) 3px 5px);border:1px solid var(--line)"></span><span style="color:var(--muted)">Autres fournisseurs</span><span class="m">${fmtCm(reste)}</span><span class="v">${fmtPct(reste / e0.dgp)}</span></div>` : ""}
+    </div>
+    ${!brands.length ? `<p class="hint" style="margin:8px 0 0">Saisissez les facings de départ (C) pour voir le split par marque.</p>` : ""}`;
+}
 function renderDetail() {
   syncSegs();
   const oi = $("#detObj"); if (oi && document.activeElement !== oi) oi.value = fmtIn(S2.objectif.valeur);
   $("#detBody").hidden = !S2.det.on;
   if (S2.det.on) { renderStruct(); renderS0List(); }
-  renderDetRecap();
+  renderDetRecap(); renderDetRes();
 }
 function renderStruct() {
   const S = S2.det.struct;
