@@ -498,8 +498,12 @@ nav.tabs[data-mode="reimp"]{grid-template-columns:repeat(3,1fr)!important}
           <div id="stBody"></div>
         </div>
       </div>
+      <div class="blk res">
+        <div class="blk-h"><span class="blk-n">B</span><h3>Situation de départ</h3></div>
+        <div class="blk-b"><div id="detRes"></div></div>
+      </div>
       <div class="blk">
-        <div class="blk-h"><span class="blk-n">B</span><h3>Objectif</h3><button type="button" class="blk-reset" data-reset="d-obj" aria-label="Remettre ce bloc à zéro" title="Remettre à zéro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 2.6-6.4"/><path d="M3 4v5h5"/></svg><span>Remise à zéro</span></button></div>
+        <div class="blk-h"><span class="blk-n">C</span><h3>Objectif</h3><button type="button" class="blk-reset" data-reset="d-obj" aria-label="Remettre ce bloc à zéro" title="Remettre à zéro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 2.6-6.4"/><path d="M3 4v5h5"/></svg><span>Remise à zéro</span></button></div>
         <div class="blk-b">
           <div class="f-row">
             <div class="field"><label for="detObj">Objectif de PDL (facultatif)</label><input id="detObj" data-s0="objVal" inputmode="decimal" placeholder="Ex. 20"></div>
@@ -508,16 +512,12 @@ nav.tabs[data-mode="reimp"]{grid-template-columns:repeat(3,1fr)!important}
         </div>
       </div>
       <div class="blk">
-        <div class="blk-h"><span class="blk-n">C</span><h3>Facings de départ</h3><button type="button" class="blk-reset" data-reset="d-fac" aria-label="Remettre ce bloc à zéro" title="Remettre à zéro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 2.6-6.4"/><path d="M3 4v5h5"/></svg><span>Remise à zéro</span></button></div>
+        <div class="blk-h"><span class="blk-n">D</span><h3>Facings de départ</h3><button type="button" class="blk-reset" data-reset="d-fac" aria-label="Remettre ce bloc à zéro" title="Remettre à zéro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 2.6-6.4"/><path d="M3 4v5h5"/></svg><span>Remise à zéro</span></button></div>
         <div class="blk-b">
           <input class="search" id="s0Search" type="search" placeholder="Chercher une marque, un produit, un format">
           <div class="chips" id="s0Chips"></div>
           <div id="s0List"></div>
         </div>
-      </div>
-      <div class="blk res">
-        <div class="blk-h"><span class="blk-n">D</span><h3>Situation de départ</h3></div>
-        <div class="blk-b"><div id="detRes"></div></div>
       </div>
     </div>
     <button class="btn primary" data-goto="s-main" style="width:100%;margin-top:8px">Retour à la simulation</button>
@@ -1431,7 +1431,7 @@ const RESETS = {
   "s-ry": ["Supprimer tous les changements de taille du rayon ?", () => { S2.rayon = []; }],
   "d-struct": ["Remettre à zéro la taille du DGP ?", () => { S2.det.struct = { tot: { typeId: S2.det.struct.tot.typeId, etag: 0, dp: 0, pal: 0, ajust: 0 }, cab: { etag: 0, dp: 0, pal: 0, ajust: 0 } }; }],
   "d-obj": ["Effacer l'objectif ?", () => { S2.objectif = { ...S2.objectif, valeur: 0 }; }],
-  "d-fac": ["Remettre à zéro tous les facings, demi-palettes et palettes de départ ?", () => { S2.det.f = {}; S2.det.dp = {}; S2.det.pal = {}; s0SolOpen.clear(); }]
+  "d-fac": ["Remettre à zéro tous les facings, demi-palettes et palettes de départ ?", () => { S2.det.f = {}; S2.det.dp = {}; S2.det.pal = {}; S2.det.mob = { pack: 0, cab: 0 }; s0SolOpen.clear(); }]
 };
 document.addEventListener("click", e => {
   const b = e.target.closest("[data-reset]"); if (!b) return;
@@ -1777,6 +1777,11 @@ function simBase() {
       const p = prodById(id); if (!p) continue;
       const cm = num(n) * num(unit); det.pack += cm; addB(p.marque || "Sans marque", cm);
     }
+    // Mobilier AB InBev repris d'un relevé de réimplantation
+    const mob = D.mob || {};
+    det.pack += num(mob.pack); det[seg ? "cab" : "pack"] += num(mob.cab);
+    det.mob = num(mob.pack) + num(mob.cab);
+    addB("Mobilier AB InBev", det.mob);
   }
   const ref = S2.saisie === "pct" ? num(S2.pdl0) / 100 * (dgpPack + dgpCab) : num(S2.ld0) * k;
   const ldCab = D.on && seg ? det.cab : 0;
@@ -1935,7 +1940,8 @@ function badgeHTML(c, b) {
   const x = c.isole[b];
   const dLd = x.ldPack + x.ldCab, dDgp = x.dgpPack + x.dgpCab;
   if (Math.abs(dLd) < 0.05 && Math.abs(dDgp) < 0.05) return `<span class="badge">Aucun changement</span>`;
-  return `<span class="badge ${tone(x.dpdl)}"><b>${fmtPts(x.dpdl)}</b><small>LD ${fmtDCm(dLd)} · DGP ${fmtDCm(dDgp)}</small></span>`;
+  if (b === "ry") return `<span class="badge ${tone(-dDgp)}"><b>DGP ${fmtDCm(dDgp)}</b><small>Impact en points : voir Résultat</small></span>`;
+  return `<span class="badge ${tone(dLd)}"><b>LD ${fmtDCm(dLd)}</b><small>Impact en points : voir Résultat</small></span>`;
 }
 
 /* --- Vue Simulation : point de départ --- */
@@ -1974,6 +1980,7 @@ function renderS0Recap(c = simCompute()) {
         <div class="recap-line"><span>PDL de départ</span><b>${e0.dgp ? fmtPct(e0.pdl) : "–"}</b></div>
         <div class="recap-line"><span>Objectif</span><b>${objTxt}</b></div>
       </div>
+      ${detWarnings(c).length ? `<div class="warn" style="margin:8px 0 0">Le détail contient ${detWarnings(c).length} incohérence${detWarnings(c).length > 1 ? "s" : ""} : ouvrez-le pour corriger.</div>` : ""}
       ${c.ok ? ecartHTML(e0.ld, e0.dgp, S2.objectif) : ""}
       <button class="btn amber" data-goto="s-detail" style="width:100%;margin-top:12px">${base.seg || base.det.nbF ? "Modifier le détail" : "Saisir le détail"} →</button>`;
     return;
@@ -2015,7 +2022,13 @@ function updMvLine(id) {
   if (num(mv.f)) parts.push(`facings ${fmtDCm(cf)}`);
   if (cs) parts.push(`sol ${fmtDCm(cs)}`);
   let warn = "";
-  if (S2.det.on && num(S2.det.f[p.id]) + num(mv.f) < 0) warn = ` <span class="t-down">· plus de facings perdus qu'au départ</span>`;
+  if (S2.det.on) {
+    const trop = [];
+    if (num(S2.det.f[p.id]) + num(mv.f) < 0) trop.push(`facings (départ ${num(S2.det.f[p.id])})`);
+    if (num(S2.det.dp[p.id]) + num(mv.dp) < 0) trop.push(`demi-palettes (départ ${num(S2.det.dp[p.id])})`);
+    if (num(S2.det.pal[p.id]) + num(mv.pal) < 0) trop.push(`palettes (départ ${num(S2.det.pal[p.id])})`);
+    if (trop.length) warn = `<div class="t-down" style="margin-top:4px">Plus de pertes qu'au départ : ${trop.join(", ")}.</div>`;
+  }
   el.innerHTML = t || parts.length ? `LD <b class="${tone(t)}">${fmtDCm(t)}</b>${parts.length > 1 ? ` (${parts.join(", ")})` : ""}${warn}` : "Indiquez les facings, demi-palettes ou palettes gagnés (+) ou perdus (−).";
 }
 
@@ -2070,6 +2083,7 @@ function renderSimResult(c = simCompute()) {
     ${ecartHTML(e1.ld, e1.dgp, S2.objectif)}${resteHTML(e1, S2.objectif)}
 
     <h3 class="sub">D'où vient l'écart</h3>
+    <p class="hint" style="margin:0 0 6px">Les leviers sont appliqués dans cet ordre. Quand le DGP change, un même centimètre pèse plus ou moins lourd : les points de chaque ligne dépendent donc de l'ordre, mais leur somme donne toujours l'écart total.</p>
     <div class="casc">
       <div class="casc-row"><div class="lab">Point de départ</div><div class="val">${fmtPct(e0.pdl)}</div></div>
       ${c.cascade.map(x => `
@@ -2107,6 +2121,9 @@ function renderSimResult(c = simCompute()) {
     ${detail ? "" : `<p class="hint" style="margin:6px 0 0">Seules les variations apparaissent. Saisissez le détail de départ pour voir chaque marque en entier.</p>`}` : ""}
 
     ${e1.ld < -0.5 ? `<div class="warn" style="margin-top:10px">Le LD simulé devient négatif : les pertes saisies dépassent le linéaire de départ.</div>` : ""}
+    ${base.seg && e1.ldPack > e1.dgpPack + 0.5 ? `<div class="warn" style="margin-top:10px">Après changements, le LD packs dépasse le DGP packs : vérifiez la taille du rayon (bloc 3).</div>` : ""}
+    ${base.seg && e1.ldCab > e1.dgpCab + 0.5 ? `<div class="warn" style="margin-top:10px">Après changements, le LD cave à bière dépasse le DGP cave à bière : vérifiez la taille du rayon (bloc 3).</div>` : ""}
+    ${!base.seg && e1.ld > e1.dgp + 0.5 ? `<div class="warn" style="margin-top:10px">Après changements, le LD dépasse le DGP : vérifiez la taille du rayon (bloc 3).</div>` : ""}
     <div class="sellfi">
       <div><div style="font-size:13px;color:var(--muted)">DGP rayon bière après changements</div><b>${Math.round(e1.dgp)} cm</b></div>
       <button class="btn small" id="sCopyDgp">Copier</button>
@@ -2143,8 +2160,8 @@ function renderDetRes(c = simCompute()) {
   const brands = Object.entries(base.det.brands).filter(([, cm]) => cm > 0.04).sort((a, b) => b[1] - a[1])
     .map(([n, cm]) => ({ n, cm, col: ABI_COLORS[i++ % ABI_COLORS.length] }));
   const reste = Math.max(0, e0.dgp - e0.ld);
-  box.innerHTML = `
-    <div class="kpis two">
+  box.innerHTML = `${warnHTML(detWarnings(c))}
+    <div class="kpis two" style="margin-top:8px">
       <div class="kpi hero"><div class="n">${fmtPct(e0.pdl)}</div><div class="t">PDL AB InBev avant les changements</div></div>
       <div class="kpi"><div class="n">${base.seg ? fmtPct(e0.pdlPack) : "–"}</div><div class="t">PDL packs</div></div>
       <div class="kpi"><div class="n">${base.seg && e0.dgpCab ? fmtPct(e0.pdlCab) : "–"}</div><div class="t">PDL cave à bière</div></div>
@@ -2163,7 +2180,7 @@ function renderDetRes(c = simCompute()) {
       ${brands.map(b => `<div class="li"><span class="sw" style="background:${b.col}"></span><span>${esc(b.n)}</span><span class="m">${fmtCm(b.cm)}</span><span class="v">${fmtPct(b.cm / e0.dgp)}</span></div>`).join("")}
       ${reste > 0.5 ? `<div class="li"><span class="sw" style="background:repeating-linear-gradient(135deg,var(--bg) 0 3px,var(--line) 3px 5px);border:1px solid var(--line)"></span><span style="color:var(--muted)">Autres fournisseurs</span><span class="m">${fmtCm(reste)}</span><span class="v">${fmtPct(reste / e0.dgp)}</span></div>` : ""}
     </div>
-    ${!brands.length ? `<p class="hint" style="margin:8px 0 0">Saisissez les facings de départ (C) pour voir le split par marque.</p>` : ""}`;
+    ${!brands.length ? `<p class="hint" style="margin:8px 0 0">Saisissez les facings de départ (D) pour voir le split par marque.</p>` : ""}`;
 }
 function renderDetail() {
   syncSegs();
@@ -2213,6 +2230,20 @@ function updStruct() {
     <div class="recap-line" style="border-top:1px solid var(--line)"><span>DGP du rayon</span><b>${fmtCm(structDgp("tot").tot)}</b></div>
     ${over ? `<div class="warn" style="margin:6px 0 0">La cave à bière compte plus d'étagères, de demi-palettes ou de palettes que le total.</div>` : ""}`;
 }
+function detWarnings(c) {
+  const { base, e0 } = c, D = S2.det, S = D.struct, w = [];
+  if (!D.on) return w;
+  const sum = o => Object.entries(o).reduce((a, [id, n]) => a + (prodById(id) ? num(n) : 0), 0);
+  const dpAbi = sum(D.dp), palAbi = sum(D.pal);
+  if (base.seg && dpAbi > num(S.tot.dp)) w.push(`${dpAbi} demi-palette${dpAbi > 1 ? "s" : ""} AB InBev au départ (D), mais seulement ${num(S.tot.dp)} dans le rayon (A).`);
+  if (base.seg && palAbi > num(S.tot.pal)) w.push(`${palAbi} palette${palAbi > 1 ? "s" : ""} AB InBev au départ (D), mais seulement ${num(S.tot.pal)} dans le rayon (A).`);
+  if (["etag", "dp", "pal"].some(k => num(S.cab[k]) > num(S.tot[k]))) w.push("La cave à bière compte plus d'étagères, de demi-palettes ou de palettes que le total (A).");
+  if (base.seg && e0.ldPack > e0.dgpPack + 0.5) w.push(`Le LD packs (${fmtCm(e0.ldPack)}) dépasse le DGP packs (${fmtCm(e0.dgpPack)}).`);
+  if (base.seg && e0.ldCab > e0.dgpCab + 0.5) w.push(`Le LD cave à bière (${fmtCm(e0.ldCab)}) dépasse le DGP cave à bière (${fmtCm(e0.dgpCab)}).`);
+  if (!base.seg && e0.dgp && e0.ld > e0.dgp + 0.5) w.push("Le LD dépasse le DGP : vérifiez les facings ou la taille du rayon.");
+  return w;
+}
+const warnHTML = w => w.map(t => `<div class="warn" style="margin:8px 0 0">${t}</div>`).join("");
 function renderDetRecap(c = simCompute()) {
   const box = $("#detRecap"); if (!box) return;
   if (!S2.det.on) { box.innerHTML = `<p class="hint" style="margin:0">Activez le détail pour saisir le DGP, les facings de départ et l'objectif.</p>`; return; }
@@ -2222,7 +2253,8 @@ function renderDetRecap(c = simCompute()) {
     <div class="recap-line"><span>LD AB InBev</span><b>${fmtCm(e0.ld)}</b></div>
     <div class="recap-line"><span>PDL de départ</span><b>${e0.dgp ? fmtPct(e0.pdl) : "–"}</b></div>
     ${!e0.dgp ? `<p class="hint" style="margin:4px 0 0">Renseignez la taille du DGP (A) pour obtenir la PDL.</p>` : ""}
-    ${e0.ld > e0.dgp + 0.5 && e0.dgp ? `<div class="warn" style="margin:6px 0 0">Le LD dépasse le DGP : vérifiez les facings ou la taille du rayon.</div>` : ""}`;
+    ${base.det.mob > 0.5 ? `<div class="recap-line sm"><span>dont mobilier AB InBev repris du relevé</span><span>${fmtCm(base.det.mob)}</span></div>` : ""}
+    ${warnHTML(detWarnings(c))}`;
 }
 const s0Has = id => !!(num(S2.det.f[id]) || num(S2.det.dp[id]) || num(S2.det.pal[id]));
 function filtreProd(p, flt, q) {
@@ -2298,6 +2330,11 @@ function releveVersSimulation() {
     if (num(R.facings[p.id])) s.det.f[p.id] = num(R.facings[p.id]);
     if (num(R.dp[p.id])) s.det.dp[p.id] = num(R.dp[p.id]);
     if (num(R.pal[p.id])) s.det.pal[p.id] = num(R.pal[p.id]);
+  }
+  s.det.mob = { pack: 0, cab: 0 };
+  for (const m of R.mobiliers || []) {
+    const cat = REF.mobiliers.find(x => x.id === m.mobId); if (!cat || !m.abi) continue;
+    s.det.mob[m.segment === "cab" ? "cab" : "pack"] += num(cat.cm) * num(m.nb);
   }
   s.objectif = { ...(R.objectif || s.objectif) };
   S2 = s; saveSim2(); show("s-main"); toast("Relevé repris comme point de départ");
