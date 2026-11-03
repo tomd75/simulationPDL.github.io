@@ -1,6 +1,7 @@
 /* Service worker : rend l'application utilisable sans réseau.
-   À déposer à côté de index.html, à la racine du site. */
-const VERSION = "pdl-v1";
+   À déposer à côté de index.html, à la racine du site.
+   Changer VERSION à chaque mise en ligne d'un nouvel index.html. */
+const VERSION = "pdl-v2";
 const APP = ["./", "./index.html"];
 const EXTERNES = [
   "https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600;700&display=swap"
